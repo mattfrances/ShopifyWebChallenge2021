@@ -7,9 +7,9 @@ function App() {
   const [movieList, setMovieList] = useState([]);
   const [nominated, setNominated] = useState([]);
 
-  // const handleMovieListUpdate = (list) => {
-  //   setMovieList(list);
-  // };
+  const updateMovieList = (list) => {
+    setMovieList(list);
+  };
 
   // const nominateMovie = (movie) => {
   //   if (nominated.length >= 5) {
@@ -29,7 +29,7 @@ function App() {
         <h1 className="text-4xl m-0 font-bold">The Shoppies.</h1>
         <h1 className="text-4xl m-0 font-normal">Pick your top five.</h1>
         {/* Search bar */}
-        <SearchBar />
+        <SearchBar updateMovieList={updateMovieList} />
       </div>
       {/* Lists */}
       <div className="mt-7 mb-8 px-5 space-y-7 md:space-y-0 md:space-x-7 md:flex">
