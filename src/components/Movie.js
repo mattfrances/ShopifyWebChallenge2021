@@ -1,13 +1,13 @@
 import React from 'react';
 import templateImg from './templateImg.png';
 
-const Movie = (props) => {
+const Movie = ({ title, year, image }) => {
   return (
     <div className="flex p-5 ">
-      <img className="w-24" src={templateImg} />
+      <img className="w-24" src={image} />
       <div className="flex flex-col justify-between w-full pl-2.5">
         <h3>
-          <span className="font-bold">Moonlight</span> (2016)
+          <span className="font-bold">{title}</span> ({year})
         </h3>
         <p className="text-sm truncate-3-lines -mt-2 text-gray-400">
           A young African-American man grapples with his identity and sexuality

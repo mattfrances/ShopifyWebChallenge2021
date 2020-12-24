@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const API_URL = 'http://www.omdbapi.com/';
 
-const SearchBar = ({ updateMovieList }) => {
+const SearchBar = ({ updateSearchValue, updateMovieList }) => {
   const handleSearch = (event) => {
     if (
       event.keyCode !== 13 ||
@@ -25,8 +25,12 @@ const SearchBar = ({ updateMovieList }) => {
         },
       })
       .then((result) => {
+        updateSearchValue(value);
         updateMovieList(result.data.Search);
         document.getElementById('searchInput').blur();
+      })
+      .catch((error) => {
+        console.log('ERROR'); // TODO - replace this with an alert message
       });
   };
 
