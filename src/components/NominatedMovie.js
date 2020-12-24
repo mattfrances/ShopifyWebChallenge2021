@@ -6,25 +6,22 @@ const Movie = ({
   title,
   year,
   image,
-  onClickMovieNominate,
-  disabled,
+  description,
+  onClickRemoveNomination,
 }) => {
   return (
     <div className="flex p-5">
       <img className="w-24" src={image} />
-      <div className="flex flex-col justify-around w-full pl-2.5">
+      <div className="flex flex-col justify-between w-full pl-2.5">
         <h3>
           <span className="font-bold">{title}</span> ({year})
         </h3>
-        {/* <p className="text-sm truncate-3-lines -mt-2 text-gray-400">
-          A young African-American man grapples with his identity and sexuality
-          while experiencing the everyday struggles of childhood, adolescence,
-          and burgeoning adulthood.
-        </p> */}
+        <p className="text-sm truncate-3-lines -mt-2 text-gray-400">
+          {description}
+        </p>
         <button
-          className="flex justify-center items-center rounded px-2.5 py-1 w-28 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 disabled:opacity-50"
-          disabled={disabled}
-          onClick={() => onClickMovieNominate(imdbID)}
+          className="flex justify-center items-center rounded px-2.5 py-1 w-28 text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50"
+          onClick={() => onClickRemoveNomination(imdbID)}
         >
           <span className="mr-1">
             <svg
@@ -38,11 +35,11 @@ const Movie = ({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M5 13l4 4L19 7"
+                d="M6 18L18 6M6 6l12 12"
               />
             </svg>
           </span>
-          Nominate
+          Remove
         </button>
       </div>
     </div>
