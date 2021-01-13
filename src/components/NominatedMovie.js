@@ -1,5 +1,5 @@
 import React from 'react';
-import templateImg from './templateImg.png';
+import moviePosterPlaceholder from '../assets/images/moviePosterPlaceholder.png';
 
 const Movie = ({
   imdbID,
@@ -9,11 +9,22 @@ const Movie = ({
   description,
   onClickRemoveNomination,
 }) => {
+  const addPlacehodlerImage = (event) => {
+    event.target.src = moviePosterPlaceholder;
+  };
+
   return (
-    <div className="flex p-5">
-      <img className="w-24" src={image} />
+    <div className="flex p-5 dark:border-gray-900">
+      <div className="w-40 min-w-24 max-h-40 flex">
+        <img
+          className="max-h-40 min-w-24 object-contain"
+          src={image}
+          onError={(event) => addPlacehodlerImage(event)}
+          alt="Nominated movie poster."
+        />
+      </div>
       <div className="flex flex-col justify-between w-full pl-2.5">
-        <h3>
+        <h3 className="dark:text-white">
           <span className="font-bold">{title}</span> ({year})
         </h3>
         <p className="text-sm truncate-3-lines -mt-2 text-gray-400">

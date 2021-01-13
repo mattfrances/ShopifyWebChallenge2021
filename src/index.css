@@ -1,5 +1,9 @@
-body {
+.light body {
   background-color: #f5f5f5 !important;
+}
+
+.dark body {
+  background-color: #121212 !important;
 }
 
 @tailwind base;

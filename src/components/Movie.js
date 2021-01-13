@@ -1,5 +1,5 @@
 import React from 'react';
-import templateImg from './templateImg.png';
+import moviePosterPlaceholder from '../assets/images/moviePosterPlaceholder.png';
 
 const Movie = ({
   imdbID,
@@ -9,18 +9,24 @@ const Movie = ({
   onClickMovieNominate,
   disabled,
 }) => {
+  const addPlacehodlerImage = (event) => {
+    event.target.src = moviePosterPlaceholder;
+  };
+
   return (
-    <div className="flex p-5">
-      <img className="w-24" src={image} />
+    <div className="flex p-5 dark:border-gray-900">
+      <div className="w-40 min-w-24 max-h-40 flex">
+        <img
+          className="max-h-40 min-w-24 object-contain"
+          src={image}
+          onError={(event) => addPlacehodlerImage(event)}
+          alt="Searched movie poster."
+        />
+      </div>
       <div className="flex flex-col justify-around w-full pl-2.5">
-        <h3>
+        <h3 className="dark:text-white">
           <span className="font-bold">{title}</span> ({year})
         </h3>
-        {/* <p className="text-sm truncate-3-lines -mt-2 text-gray-400">
-          A young African-American man grapples with his identity and sexuality
-          while experiencing the everyday struggles of childhood, adolescence,
-          and burgeoning adulthood.
-        </p> */}
         <button
           className="flex justify-center items-center rounded px-2.5 py-1 w-28 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 disabled:opacity-50"
           disabled={disabled}

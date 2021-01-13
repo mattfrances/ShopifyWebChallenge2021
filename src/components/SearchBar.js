@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const API_URL = 'http://www.omdbapi.com/';
+const API_URL = 'https://www.omdbapi.com/';
 
 const SearchBar = ({ updateSearchValue, updateMovieList }) => {
   const handleSearch = (event) => {
@@ -14,7 +15,6 @@ const SearchBar = ({ updateSearchValue, updateMovieList }) => {
     }
 
     const value = event.target.value;
-
     axios
       .get(API_URL, {
         params: {
@@ -25,19 +25,19 @@ const SearchBar = ({ updateSearchValue, updateMovieList }) => {
         },
       })
       .then((result) => {
+        updateMovieList(result.data);
         updateSearchValue(value);
-        updateMovieList(result.data.Search);
         document.getElementById('searchInput').blur();
       })
-      .catch((error) => {
-        console.log('ERROR'); // TODO - replace this with an alert message
+      .catch(() => {
+        toast.error('There was an error searching for a movie');
       });
   };
 
   return (
     <div className="mt-7 h-12 relative rounded shadow-sm">
-      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <span className="text-gray-200">
+      <div className="absolute inset-y-0 left-0 ml-1 pl-2 flex items-center pointer-events-none dark:bg-gray-800">
+        <span className="text-gray-200 dark:text-gray-700">
           <svg
             className="w-6"
             xmlns="http://www.w3.org/2000/svg"
@@ -56,9 +56,9 @@ const SearchBar = ({ updateSearchValue, updateMovieList }) => {
       </div>
       <input
         id="searchInput"
-        type="text"
+        type="search"
         name="search"
-        className="border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent block w-full h-full px-12 placeholder-gray-200 rounded-md"
+        className="border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent block w-full h-full px-12 placeholder-gray-200 rounded-md dark:bg-gray-800 dark:placeholder-gray-700 dark:text-white"
         placeholder="Search for a movie by title..."
         onKeyDown={(event) => handleSearch(event)}
       />

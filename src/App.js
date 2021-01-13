@@ -1,31 +1,73 @@
-import { useState } from 'react';
-import './App.css';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import SearchBar from './components/SearchBar';
 import MovieList from './components/MovieList';
 import NominationList from './components/NominationList';
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+import { ThemeProvider } from './context/ThemeContext';
+import ToggleTheme from './components/ToggleTheme';
 
-const API_URL = 'http://www.omdbapi.com/';
+const API_URL = 'https://www.omdbapi.com/';
 
 function App() {
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState(null);
+  const [totalResults, setTotalResults] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const [movieList, setMovieList] = useState([]);
   const [nominated, setNominated] = useState([]);
+
+  useEffect(() => {
+    if (
+      localStorage.getItem('nominated') &&
+      JSON.parse(localStorage.getItem('nominated')).length !== 0
+    ) {
+      setNominated(JSON.parse(localStorage.getItem('nominated')));
+    }
+  }, []);
 
   const updateSearchValue = (value) => {
     setSearchValue(value);
   };
 
-  const updateMovieList = (list) => {
-    setMovieList(list);
+  const updateMovieList = (movieListData) => {
+    if (movieListData.Error) {
+      setMovieList([]);
+      setTotalResults(0);
+      setCurrentPage(0);
+    } else {
+      setMovieList(movieListData.Search);
+      setTotalResults(movieListData.totalResults);
+      setCurrentPage(1);
+    }
+  };
+
+  const handlePageChange = (pageNumber) => {
+    axios
+      .get(API_URL, {
+        params: {
+          apikey: process.env.REACT_APP_OMDb_API_KEY,
+          type: 'movie',
+          s: searchValue,
+          page: pageNumber,
+        },
+      })
+      .then((result) => {
+        if (result.data.Error) {
+          setMovieList([]);
+        } else {
+          setMovieList(result.data.Search);
+        }
+      })
+      .catch(() => {
+        toast.error('There was an error searching for a movie');
+      });
+    setCurrentPage(pageNumber);
   };
 
   const nominateMovie = (imdbID) => {
     if (nominated.length >= 5) {
-      console.log('ERROR: reached nomination limit'); // TODO - convert this to alert message
-      return;
-    } else if (nominated.some((movie) => movie.imdbID === imdbID)) {
-      console.log('ERROR: movie already nominated'); // TODO - convert this to alert message
+      toast.error("You've reached your nomination limit");
       return;
     }
 
@@ -39,49 +81,71 @@ function App() {
         },
       })
       .then((result) => {
-        setNominated((oldNominated) => [...oldNominated, result.data]);
+        const updatedNominations = [...nominated, result.data];
+        localStorage.setItem('nominated', JSON.stringify(updatedNominations));
+        setNominated(updatedNominations);
       })
-      .catch((error) => {
-        console.log('ERROR'); // TODO - replace this with an alert message
+      .catch(() => {
+        toast.error('Movie could not be nominated');
       });
   };
 
   const removeNomination = (imdbID) => {
-    setNominated(nominated.filter((movie) => movie.imdbID !== imdbID));
+    const updatedNominations = nominated.filter(
+      (movie) => movie.imdbID !== imdbID
+    );
+    localStorage.setItem('nominated', JSON.stringify(updatedNominations));
+    setNominated(updatedNominations);
   };
 
   return (
-    <div className="container mx-auto lg:max-w-screen-lg">
-      {/* Titles */}
-      <div className="w-full pt-10 px-5">
-        <h1 className="text-4xl m-0 font-bold">The Shoppies.</h1>
-        <h1 className="text-4xl m-0 font-normal">Pick your top five.</h1>
-        {/* Search bar */}
-        <SearchBar
-          updateSearchValue={updateSearchValue}
-          updateMovieList={updateMovieList}
-        />
-      </div>
-      {/* Lists */}
-      <div className="mt-7 mb-8 px-5 space-y-7 md:space-y-0 md:space-x-7 md:flex">
-        {/* Movie List */}
-        <div className="w-full md:w-1/2">
-          <h2 className="text-lg font-bold">{`Search results for: "${searchValue}"`}</h2>
+    <ThemeProvider>
+      <div className="container mx-auto lg:max-w-screen-lg">
+        <div className="w-full pt-10 px-5">
+          <div className="flex flex-row justify-between items-start">
+            <div>
+              <h1 className="text-4xl m-0 font-bold dark:text-white">
+                The Shoppies.
+              </h1>
+              <h1 className="text-4xl m-0 font-normal dark:text-white">
+                Pick your top five.
+              </h1>
+            </div>
+            <ToggleTheme />
+          </div>
+          <SearchBar
+            updateSearchValue={updateSearchValue}
+            updateMovieList={updateMovieList}
+          />
+        </div>
+        <div className="mt-7 mb-8 px-5 space-y-7 md:space-y-0 md:space-x-7 md:flex">
           <MovieList
+            searchValue={searchValue}
+            totalResults={totalResults}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
             movieList={movieList}
             nominateMovie={nominateMovie}
             nominated={nominated}
           />
-        </div>
-        {/* Nomination List */}
-        <div className="w-full md:w-1/2">
           <NominationList
             nominated={nominated}
             removeNomination={removeNomination}
           />
         </div>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover={false}
+        />
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 
