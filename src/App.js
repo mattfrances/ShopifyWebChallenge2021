@@ -7,8 +7,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import { ThemeProvider } from './context/ThemeContext';
 import ToggleTheme from './components/ToggleTheme';
+import { getMovieByIMDbID } from './services/index';
 
-const API_URL = 'https://www.omdbapi.com/';
+const API_URL = 'https://www.omdbapi.com/'; // TODO - Change this to be part of env
 
 function App() {
   const [searchValue, setSearchValue] = useState(null);
@@ -17,8 +18,14 @@ function App() {
   const [movieList, setMovieList] = useState([]);
   const [nominated, setNominated] = useState([]);
 
-  useEffect(() => {
-    if (
+  useEffect(async () => {
+    const urlParams = new URLSearchParams(window.location.search).getAll(
+      'nominated'
+    );
+
+    if (urlParams.length > 0) {
+      getNominationsFromURL(urlParams);
+    } else if (
       localStorage.getItem('nominated') &&
       JSON.parse(localStorage.getItem('nominated')).length !== 0
     ) {
@@ -40,6 +47,25 @@ function App() {
       setTotalResults(movieListData.totalResults);
       setCurrentPage(1);
     }
+  };
+
+  // TODO
+  const getNominationsFromURL = async (urlParams) => {
+    const urlNominations = [];
+    try {
+      for (const imdbID of urlParams) {
+        const response = await getMovieByIMDbID(imdbID);
+        console.log(response.data);
+        if (response.data.Error) {
+          throw new Error('There is an invalid IMDb ID in the URL');
+        }
+        urlNominations.push(response.data);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+
+    setNominated(urlNominations);
   };
 
   const handlePageChange = (pageNumber) => {

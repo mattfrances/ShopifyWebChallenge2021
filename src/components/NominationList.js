@@ -1,10 +1,19 @@
 import React from 'react';
 import NominatedMovie from './NominatedMovie';
 import MovieEmptyState from './EmptyStates/MovieEmptyState';
+import { toast } from 'react-toastify';
 
 const NominationList = ({ nominated, removeNomination }) => {
   const onClickRemoveNomination = (imdbID) => {
     removeNomination(imdbID);
+  };
+
+  const handleShareNominations = () => {
+    const queryString =
+      `${process.env.REACT_APP_WEB_HOST}?` +
+      nominated.map((movie) => `nominated=${movie.imdbID}`).join('&');
+    navigator.clipboard.writeText(queryString);
+    toast('Nominations copied to clipboard!');
   };
 
   return (
@@ -15,6 +24,7 @@ const NominationList = ({ nominated, removeNomination }) => {
           5 - nominated.length
         } remaining`}</span>
       </h2>
+      <button onClick={() => handleShareNominations()}>Share</button>
       {nominated.length === 0 && (
         <MovieEmptyState message={'Nominate a movie to see it here.'} />
       )}
