@@ -4,12 +4,9 @@ import SearchBar from './components/SearchBar';
 import MovieList from './components/MovieList';
 import NominationList from './components/NominationList';
 import { ToastContainer, toast } from 'react-toastify';
-import axios from 'axios';
 import { ThemeProvider } from './context/ThemeContext';
 import ToggleTheme from './components/ToggleTheme';
-import { getMovieByIMDbID } from './services/index';
-
-const API_URL = 'https://www.omdbapi.com/'; // TODO - Change this to be part of env
+import { getMovieByIMDbID, getMoviesByTitle } from './services/index';
 
 function App() {
   const [searchValue, setSearchValue] = useState(null);
@@ -49,7 +46,6 @@ function App() {
     }
   };
 
-  // TODO
   const getNominationsFromURL = async (urlParams) => {
     const urlNominations = [];
     try {
@@ -57,63 +53,47 @@ function App() {
         const response = await getMovieByIMDbID(imdbID);
         console.log(response.data);
         if (response.data.Error) {
-          throw new Error('There is an invalid IMDb ID in the URL');
+          throw new Error();
         }
         urlNominations.push(response.data);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error('There is an invalid IMDb ID in the URL');
     }
 
     setNominated(urlNominations);
   };
 
-  const handlePageChange = (pageNumber) => {
-    axios
-      .get(API_URL, {
-        params: {
-          apikey: process.env.REACT_APP_OMDb_API_KEY,
-          type: 'movie',
-          s: searchValue,
-          page: pageNumber,
-        },
-      })
-      .then((result) => {
-        if (result.data.Error) {
-          setMovieList([]);
-        } else {
-          setMovieList(result.data.Search);
-        }
-      })
-      .catch(() => {
-        toast.error('There was an error searching for a movie');
-      });
+  const handlePageChange = async (pageNumber) => {
+    try {
+      const response = await getMoviesByTitle(searchValue, pageNumber);
+      if (response.data.Error) {
+        setMovieList([]);
+        throw new Error();
+      } else {
+        setMovieList(response.data.Search);
+      }
+    } catch (error) {
+      toast.error('There was an error searching for a movie');
+    }
+
     setCurrentPage(pageNumber);
   };
 
-  const nominateMovie = (imdbID) => {
+  const nominateMovie = async (imdbID) => {
     if (nominated.length >= 5) {
       toast.error("You've reached your nomination limit");
       return;
     }
 
-    axios
-      .get(API_URL, {
-        params: {
-          apikey: process.env.REACT_APP_OMDb_API_KEY,
-          type: 'movie',
-          i: imdbID,
-          plot: 'short',
-        },
-      })
-      .then((result) => {
-        const updatedNominations = [...nominated, result.data];
-        localStorage.setItem('nominated', JSON.stringify(updatedNominations));
-        setNominated(updatedNominations);
-      })
-      .catch(() => {
-        toast.error('Movie could not be nominated');
-      });
+    try {
+      const response = await getMovieByIMDbID(imdbID);
+      const updatedNominations = [...nominated, response.data];
+      localStorage.setItem('nominated', JSON.stringify(updatedNominations));
+      setNominated(updatedNominations);
+    } catch (error) {
+      toast.error('Movie could not be nominated');
+    }
   };
 
   const removeNomination = (imdbID) => {

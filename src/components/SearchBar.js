@@ -1,11 +1,9 @@
 import React from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-
-const API_URL = 'https://www.omdbapi.com/';
+import { getMoviesByTitle } from '../services';
 
 const SearchBar = ({ updateSearchValue, updateMovieList }) => {
-  const handleSearch = (event) => {
+  const search = async (event) => {
     if (
       event.keyCode !== 13 ||
       event.target.value === null ||
@@ -14,24 +12,15 @@ const SearchBar = ({ updateSearchValue, updateMovieList }) => {
       return;
     }
 
-    const value = event.target.value;
-    axios
-      .get(API_URL, {
-        params: {
-          apikey: process.env.REACT_APP_OMDb_API_KEY,
-          type: 'movie',
-          s: value,
-          page: 1,
-        },
-      })
-      .then((result) => {
-        updateMovieList(result.data);
-        updateSearchValue(value);
-        document.getElementById('searchInput').blur();
-      })
-      .catch(() => {
-        toast.error('There was an error searching for a movie');
-      });
+    const movieTitle = event.target.value;
+    try {
+      const response = await getMoviesByTitle(movieTitle, 1);
+      updateMovieList(response.data);
+      updateSearchValue(movieTitle);
+      document.getElementById('searchInput').blur();
+    } catch (error) {
+      toast.error('There was an error searching for a movie');
+    }
   };
 
   return (
@@ -60,7 +49,7 @@ const SearchBar = ({ updateSearchValue, updateMovieList }) => {
         name="search"
         className="border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent block w-full h-full px-12 placeholder-gray-200 rounded-md dark:bg-gray-800 dark:placeholder-gray-700 dark:text-white"
         placeholder="Search for a movie by title..."
-        onKeyDown={(event) => handleSearch(event)}
+        onKeyDown={(event) => search(event)}
       />
     </div>
   );
