@@ -30,22 +30,6 @@ function App() {
     }
   }, []);
 
-  const updateSearchValue = (value) => {
-    setSearchValue(value);
-  };
-
-  const updateMovieList = (movieListData) => {
-    if (movieListData.Error) {
-      setMovieList([]);
-      setTotalResults(0);
-      setCurrentPage(0);
-    } else {
-      setMovieList(movieListData.Search);
-      setTotalResults(movieListData.totalResults);
-      setCurrentPage(1);
-    }
-  };
-
   const getNominationsFromURL = async (urlParams) => {
     const urlNominations = [];
     try {
@@ -62,6 +46,22 @@ function App() {
     }
 
     setNominated(urlNominations);
+  };
+
+  const updateSearchValue = (value) => {
+    setSearchValue(value);
+  };
+
+  const updateMovieList = (movieListData) => {
+    if (movieListData.Error) {
+      setMovieList([]);
+      setTotalResults(0);
+      setCurrentPage(0);
+    } else {
+      setMovieList(movieListData.Search);
+      setTotalResults(movieListData.totalResults);
+      setCurrentPage(1);
+    }
   };
 
   const handlePageChange = async (pageNumber) => {
