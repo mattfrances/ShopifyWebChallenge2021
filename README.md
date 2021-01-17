@@ -1,5 +1,5 @@
 <h1 align="center">Shopify Shoppies</h1>
-<h3 align="center">Summer 2021 Frontend Developer Internship Challenge</h3>
+<h3 align="center">Shopify Summer 2021 Frontend Developer Internship Challenge</h3>
 <h3 align="center"><a href="https://shoppiesmattfrances.netlify.app/" target="_blank">https://shoppiesmattfrances.netlify.app/</a></h3>
 
 ### Description

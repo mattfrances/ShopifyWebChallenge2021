@@ -23,7 +23,7 @@ module.exports = {
   variants: {
     extend: {
       opacity: ['disabled'],
-      textColor: ['dark', 'responsive', 'hover', 'focus'],
+      textColor: ['dark', 'responsive', 'hover', 'focus', 'disabled'],
       backgroundColor: ['dark', 'responsive', 'hover', 'focus'],
     },
   },

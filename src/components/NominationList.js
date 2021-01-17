@@ -26,7 +26,8 @@ const NominationList = ({ nominated, removeNomination }) => {
           } remaining`}</span>
         </h2>
         <button
-          className="rounded px-1.5 py-0.5 text-blue-600 hover:text-blue-500 focus:outline-none"
+          className="rounded px-1.5 py-0.5 text-blue-600 hover:text-blue-500 focus:outline-none disabled:text-gray-300"
+          disabled={nominated.length === 0}
           onClick={() => handleShareNominations()}
         >
           Share
