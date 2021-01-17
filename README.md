@@ -1,70 +1,32 @@
-# Getting Started with Create React App
+<h1 align="center">Shopify Shoppies</h1>
+<h3 align="center">Summer 2021 Frontend Developer Internship Challenge</h3>
+<h3 align="center"><a href="https://shoppiesmattfrances.netlify.app/">https://shoppiesmattfrances.netlify.app/</a></h3>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Description
+An app to manage movie nominations. As a user, you can save up to 5 of your favourite films as nominations. You can then share your list with friends! 
+<a href="https://docs.google.com/document/d/1AZO0BZwn1Aogj4f3PDNe1mhq8pKsXZxtrG--EIbP_-w/edit">Click here to view the full description</a>.
 
-## Available Scripts
+### Designs
+I began by designing my app to gain a deeper understanding of the functionality, and the user experience I would like to create. Using Figma, I created mockups for both web and mobile. <a href="https://www.figma.com/file/vbWGKHJ52sca5Wk9pMLUOj/TheShoppies?node-id=0%3A1">Click here to view my Figma designs.</a>
 
-In the project directory, you can run:
+### Development
+To build the app, I used React as it is fast, scalable and simple to use. For styling, I used Tailwind CSS to keep the codebase clean and easy to read. It was my first time using Tailwind, but found it to be a great developer experience.
 
-### `yarn start`
+### Features
+🕵️‍♀️ Search for a movie by title <br>
+🍿 Nominate a movie from your search results to add it to your nominations list (max 5 nominations) <br>
+🚫 Remove a nomination from your nominations list <br>
+😎 Automatically store your nominations in your browser so you can come back to them later <br>
+👨‍💻 Share your nominations through link sharing <br>
+🌙 Keep your 👀 relaxed at night with dark mode <br>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### I want to run it myself!
+You'll need a couple steps to get it up and running locally.
+1. Run ```git clone https://github.com/mattfrances/ShopifyWebChallenge2021.git```
+2. Open a terminal window in the directory you cloned the repo, and do ```cd ShopifyWebChallenge2021```
+3. Run ```npm install```
+4. Create a ```.env``` file in the root folder of the project containing the following values:<br>
+REACT_APP_OMDb_API_KEY = {{YOUR_OMDb_API_KEY}}<br>
+REACT_APP_OMDb_API_URL = https://www.omdbapi.com/<br>
+REACT_APP_WEB_HOST = http://localhost:3000/
+5. Run ```npm start```
